@@ -28,6 +28,8 @@ Utilize the library by leveraging the asynchronous iterator for parsing HTML str
 ```ts
 import parseHTMLStream from 'parse-html-stream';
 
+// ...
+
 const reader = res.body.getReader();
 
 for await (const node of parseHTMLStream(reader)) {
