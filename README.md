@@ -10,8 +10,17 @@
 ![npm](https://img.shields.io/npm/dw/parse-html-stream)
 [![size](https://img.shields.io/bundlephobia/minzip/parse-html-stream)](https://bundlephobia.com/package/parse-html-stream)
 [![PRs Welcome][badge-prwelcome]][prwelcome]
+<a href="https://github.com/aralroca/parse-html-stream/actions?query=workflow%3ACI" alt="Tests status">
+<img src="https://github.com/aralroca/parse-html-stream/workflows/CI/badge.svg" /></a>
+<a href="https://twitter.com/intent/follow?screen_name=aralroca">
+<img src="https://img.shields.io/twitter/follow/aralroca?style=social&logo=x"
+            alt="follow on Twitter"></a>
 
 </div>
+
+[badge-prwelcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[prwelcome]: http://makeapullrequest.com
+[spectrum]: https://spectrum.chat/parse-html-stream
 
 ## Getting started
 
@@ -23,7 +32,7 @@ bun install parse-html-stream
 
 ## Usage Example
 
-Utilize the library by leveraging the asynchronous iterator for parsing HTML streams. The following TypeScript example demonstrates its usage:
+Utilize the library by leveraging the asynchronous generator for parsing HTML streams. The following TypeScript example demonstrates its usage:
 
 ```ts
 import parseHTMLStream from 'parse-html-stream';
