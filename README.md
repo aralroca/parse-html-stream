@@ -1,5 +1,9 @@
 # parse-html-stream
 
+## Overview
+
+`parse-html-stream` is a JavaScript library designed for client-side applications, specifically tailored for processing HTML streams. The primary objective is to capture and manipulate DOM Nodes as they are received, enabling seamless integration into hypermedia communication paradigms, such as HTMX.
+
 <div align="center">
 
 [![npm version](https://badge.fury.io/js/parse-html-stream.svg)](https://badge.fury.io/js/parse-html-stream)
@@ -8,10 +12,6 @@
 [![PRs Welcome][badge-prwelcome]][prwelcome]
 
 </div>
-
-## Overview
-
-`parse-html-stream` is a JavaScript library designed for client-side applications, specifically tailored for processing HTML streams. The primary objective is to capture and manipulate DOM Nodes as they are received, enabling seamless integration into hypermedia communication paradigms, such as HTMX.
 
 ## Getting started
 
