@@ -1,0 +1,28 @@
+{
+  "name": "parse-html-stream",
+  "version": "0.1.0",
+  "module": "./build/index.js",
+  "type": "module",
+  "main": "./build/index.js",
+  "types": "./index.d.ts",
+  "license": "MIT",
+  "author": {
+    "name": "Aral Roca Gòmez",
+    "email": "contact@aralroca.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aralroca/parse-html-stream.git"
+  },
+  "scripts": {
+    "build": "bun build --minify --outdir=build src/index.ts",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@happy-dom/global-registrator": "13.3.1",
+    "@types/bun": "1.0.4"
+  },
+  "peerDependencies": {
+    "typescript": "5.0.0"
+  }
+}
