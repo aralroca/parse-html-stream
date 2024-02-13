@@ -1,6 +1,6 @@
 {
   "name": "parse-html-stream",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "module": "./build/index.js",
   "type": "module",
   "main": "./build/index.js",
@@ -11,7 +11,8 @@
     "email": "contact@aralroca.com"
   },
   "files": [
-    "build"
+    "build",
+    "index.d.ts"
   ],
   "repository": {
     "type": "git",
