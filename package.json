@@ -1,6 +1,6 @@
 {
   "name": "parse-html-stream",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "module": "./build/index.js",
   "type": "module",
   "main": "./build/index.js",
