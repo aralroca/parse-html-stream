@@ -1,13 +1,14 @@
-import { GlobalRegistrator } from "@happy-dom/global-registrator";
-import { describe, it, expect, afterEach } from "bun:test";
+import { describe, it, expect } from "bun:test";
+
+const { JSDOM } = require("jsdom");
+
+const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
+global.document = dom.window.document;
+global.window = dom.window;
 
 describe("utils", () => {
   describe("rpc", () => {
     describe("parse-html-stream", () => {
-      afterEach(() => {
-        GlobalRegistrator.unregister();
-      });
-
       it("should handle an empty HTML stream", async () => {
         const stream = new ReadableStream({
           start(controller) {
@@ -16,16 +17,11 @@ describe("utils", () => {
         });
 
         const reader = stream.getReader();
-
         const nodes = [];
 
-        GlobalRegistrator.register();
+        const parseHTMLStream = await import(".").then((m) => m.default);
 
-        const extractNodesFromHtmlStream = await import(".").then(
-          (m) => m.default,
-        );
-
-        for await (const node of extractNodesFromHtmlStream(reader)) {
+        for await (const node of parseHTMLStream(reader)) {
           nodes.push(node);
         }
 
@@ -47,16 +43,11 @@ describe("utils", () => {
         });
 
         const reader = stream.getReader();
-
         const nodeNames = [];
 
-        GlobalRegistrator.register();
+        const parseHTMLStream = await import(".").then((m) => m.default);
 
-        const extractNodesFromHtmlStream = await import(".").then(
-          (m) => m.default,
-        );
-
-        for await (const node of extractNodesFromHtmlStream(reader)) {
+        for await (const node of parseHTMLStream(reader)) {
           nodeNames.push(node?.nodeName);
         }
 
@@ -68,10 +59,11 @@ describe("utils", () => {
         const stream = new ReadableStream({
           start(controller) {
             controller.enqueue(encoder.encode("<html>"));
-            controller.enqueue(encoder.encode("<!-- comment -->"));
             controller.enqueue(encoder.encode("<head />"));
             controller.enqueue(encoder.encode("<body>"));
-            controller.enqueue(encoder.encode('<div class="foo">Bar</div>'));
+            controller.enqueue(
+              encoder.encode('<div class="foo"><!-- comment -->Bar</div>'),
+            );
             controller.enqueue(encoder.encode("</body>"));
             controller.enqueue(encoder.encode("</html>"));
             controller.close();
@@ -79,25 +71,20 @@ describe("utils", () => {
         });
 
         const reader = stream.getReader();
-
         const nodeNames = [];
 
-        GlobalRegistrator.register();
+        const parseHTMLStream = await import(".").then((m) => m.default);
 
-        const extractNodesFromHtmlStream = await import(".").then(
-          (m) => m.default,
-        );
-
-        for await (const node of extractNodesFromHtmlStream(reader)) {
+        for await (const node of parseHTMLStream(reader)) {
           nodeNames.push(node?.nodeName);
         }
 
         expect(nodeNames).toEqual([
           "HTML",
-          "#comment",
           "HEAD",
           "BODY",
           "DIV",
+          "#comment",
           "#text",
         ]);
       });
@@ -112,23 +99,21 @@ describe("utils", () => {
         });
 
         const reader = stream.getReader();
-
         const nodes: Node[] = [];
 
-        GlobalRegistrator.register();
+        const parseHTMLStream = await import(".").then((m) => m.default);
 
-        const extractNodesFromHtmlStream = await import(".").then(
-          (m) => m.default,
-        );
-
-        for await (const node of extractNodesFromHtmlStream(reader)) {
+        for await (const node of parseHTMLStream(reader)) {
           nodes.push(node);
         }
 
-        expect(nodes).toHaveLength(2);
-        expect(nodes[0]?.nodeName).toBe("DIV");
-        expect(nodes[1]?.nodeName).toBe("#text");
-        expect((nodes[0] as HTMLElement).getAttribute("class")).toBe("foo");
+        expect(nodes).toHaveLength(5);
+        expect(nodes[0]?.nodeName).toBe("HTML");
+        expect(nodes[1]?.nodeName).toBe("HEAD");
+        expect(nodes[2]?.nodeName).toBe("BODY");
+        expect(nodes[3]?.nodeName).toBe("DIV");
+        expect(nodes[4]?.nodeName).toBe("#text");
+        expect((nodes[3] as HTMLElement).getAttribute("class")).toBe("foo");
       });
 
       it("should work with very nested HTML", async () => {
@@ -156,13 +141,9 @@ describe("utils", () => {
         const reader = stream.getReader();
         const nodes = [];
 
-        GlobalRegistrator.register();
+        const parseHTMLStream = await import(".").then((m) => m.default);
 
-        const extractNodesFromHtmlStream = await import(".").then(
-          (m) => m.default,
-        );
-
-        for await (const node of extractNodesFromHtmlStream(reader)) {
+        for await (const node of parseHTMLStream(reader)) {
           nodes.push(node);
         }
 

@@ -35,7 +35,7 @@ bun install parse-html-stream
 Utilize the library by leveraging the asynchronous generator for parsing HTML streams. The following TypeScript example demonstrates its usage:
 
 ```ts
-import parseHTMLStream from 'parse-html-stream';
+import parseHTMLStream from "parse-html-stream";
 
 // ...
 

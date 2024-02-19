@@ -1,47 +1,31 @@
-const START_CHUNK_SELECTOR = "S-C";
 const decoder = new TextDecoder();
-const parser = new DOMParser();
 
-/**
- * Create a generator that extracts nodes from a stream of HTML.
- */
 export default async function* parseHTMLStream(
   streamReader: ReadableStreamDefaultReader<Uint8Array>,
-  text = "",
+  doc = document.implementation.createHTMLDocument(),
+  lastChunkNode: Node | null = null,
 ): AsyncGenerator<Node> {
   const { done, value } = await streamReader.read();
 
   if (done) return;
 
-  // Append the new chunk to the text with a marker.
-  // This marker is necessary because without it, we
-  // can't know where the new chunk starts and ends.
-  text = `${text.replace(
-    `<${START_CHUNK_SELECTOR} />`,
-    "",
-  )}<${START_CHUNK_SELECTOR} />${decoder.decode(value)}`;
+  doc.write(decoder.decode(value));
 
-  // Parse the text into a DOM document with the text of all
-  // the chunks that have arrived to don't lose the previous
-  // node because some chunks are only end tags, opening tags,
-  // or text and we need to keep the full context
-  const doc = parser.parseFromString(text, "text/html");
+  let lastNode = lastChunkNode
+    ? getNextNode(lastChunkNode)
+    : doc.documentElement;
 
-  // Iterate over the chunk nodes
-  for (
-    let node = getNextNode(doc.querySelector(START_CHUNK_SELECTOR) as Node);
-    node;
-    node = getNextNode(node)
-  )
+  for (let node = lastNode; node; node = getNextNode(node)) {
+    if (node) lastNode = node;
     yield node;
+  }
 
-  // Continue reading the stream
-  yield* await parseHTMLStream(streamReader, text);
+  yield* await parseHTMLStream(streamReader, doc, lastNode ?? lastChunkNode);
 }
 
 /**
- * Get the next node in the tree. Uses depth-first search in order 
- * to work with the streamed HTML.
+ * Get the next node in the tree.
+ * It uses depth-first search in order to work with the streamed HTML.
  */
 function getNextNode(node: Node | null, deeperDone?: Boolean): Node | null {
   if (!node) return null;

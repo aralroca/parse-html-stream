@@ -23,8 +23,8 @@
     "test": "bun test"
   },
   "devDependencies": {
-    "@happy-dom/global-registrator": "13.3.1",
-    "@types/bun": "1.0.4"
+    "@types/bun": "1.0.4",
+    "jsdom": "24.0.0"
   },
   "peerDependencies": {
     "typescript": "5.0.0"
