@@ -47,3 +47,30 @@ for await (const node of parseHTMLStream(reader)) {
 ```
 
 This code snippet showcases how to iterate through the DOM Nodes in a streaming fashion, offering a practical approach for processing HTML streams in real-time.
+
+## Walker example
+
+If you prefer to have control over moving around the HTML tree of the stream, you can use the following function:
+
+```ts
+import htmlStreamWalker from "parse-html-stream/walker";
+
+// ...
+
+const reader = res.body.getReader();
+const walker = await htmlStreamWalker(reader);
+
+// Root node
+const rootNode = walker.rootNode 
+
+// Gives the firstChild taking account the stream chunks
+const child = await walker.firstChild(rootNode); 
+
+// Gives the nextSibling taking account the stream chunks
+const brother = await walker.nextSibling(rootNode); 
+
+// You can do it with every HTML node:
+const childOfBrother = await walker.firstChild(brother);
+```
+
+The stream is processed as you walk through the tree, whenever it does not find a `firstChild` or `nextSibling` and has not yet finished the stream, it asks for another chunk. This way you can walk through the tree during the stream.
