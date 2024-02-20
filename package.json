@@ -1,6 +1,6 @@
 {
   "name": "parse-html-stream",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "module": "./build/index.js",
   "type": "module",
   "main": "./build/index.js",
@@ -12,14 +12,27 @@
   },
   "files": [
     "build",
-    "index.d.ts"
+    "index.d.ts",
+    "walker.d.ts"
   ],
+  "exports": {
+    ".": {
+      "import": "./build/index.js",
+      "require": "./build/index.js",
+      "types": "./index.d.ts"
+    },
+    "./walker": {
+      "import": "./build/walker/index.js",
+      "require": "./build/walker/index.js",
+      "types": "./walker.d.ts"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/aralroca/parse-html-stream.git"
   },
   "scripts": {
-    "build": "bun build --minify --outdir=build src/index.ts",
+    "build": "bun build --minify --outdir=build src/index.ts src/walker/index.ts",
     "test": "bun test"
   },
   "devDependencies": {
