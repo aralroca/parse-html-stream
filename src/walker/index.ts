@@ -11,38 +11,45 @@ export default async function htmlStreamWalker(
   doc.open();
   await waitNextChunk();
 
-  const rootNode = closed ? null : doc.documentElement
+  const rootNode = closed ? null : doc.documentElement;
 
   async function waitNextChunk() {
     const { done, value } = await streamReader.read();
-    
+
     if (done) {
-      if(!closed) doc.close();
+      if (!closed) doc.close();
       closed = true;
-      return
+      return;
     }
 
-    doc.write(decoder.decode(value)+LAST_CHUNK_COMMENT);
+    doc.write(decoder.decode(value) + LAST_CHUNK_COMMENT);
   }
 
-  function next(field: 'firstChild' | 'nextSibling') {
+  function next(field: "firstChild" | "nextSibling") {
     return async (node: Node) => {
       if (!node) return null;
 
-      const it = document.createNodeIterator(node, 128 /* NodeFilter.SHOW_COMMENT */)
+      const it = document.createNodeIterator(
+        node,
+        128 /* NodeFilter.SHOW_COMMENT */,
+      );
 
       // Wait for other chunks when it's in the middle of the stream
-      while(it.nextNode()) {
+      while (it.nextNode()) {
         const rNode = it.referenceNode as Comment;
         if (rNode.nodeValue === LAST_CHUNK_COMMENT_CONTENT) {
           rNode.remove();
           await waitNextChunk();
         }
       }
-      
+
       return node[field];
-    }
+    };
   }
 
-  return { rootNode, firstChild: next('firstChild'), nextSibling: next('nextSibling') };
+  return {
+    rootNode,
+    firstChild: next("firstChild"),
+    nextSibling: next("nextSibling"),
+  };
 }

@@ -4,4 +4,4 @@ export default async function htmlStreamWalker(
   rootNode: Node | null;
   firstChild: (node: Node) => Node | null;
   nextSibling: (node: Node) => Node | null;
-}
+};

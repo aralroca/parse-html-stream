@@ -61,13 +61,13 @@ const reader = res.body.getReader();
 const walker = await htmlStreamWalker(reader);
 
 // Root node
-const rootNode = walker.rootNode 
+const rootNode = walker.rootNode;
 
 // Gives the firstChild taking account the stream chunks
-const child = await walker.firstChild(rootNode); 
+const child = await walker.firstChild(rootNode);
 
 // Gives the nextSibling taking account the stream chunks
-const brother = await walker.nextSibling(rootNode); 
+const brother = await walker.nextSibling(rootNode);
 
 // You can do it with every HTML node:
 const childOfBrother = await walker.firstChild(brother);
