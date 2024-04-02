@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/bun": "1.0.4",
-    "jsdom": "24.0.0"
+    "@happy-dom/global-registrator": "14.3.9"
   },
   "peerDependencies": {
     "typescript": "5.0.0"

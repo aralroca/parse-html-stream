@@ -1,12 +1,14 @@
-import { describe, it, expect } from "bun:test";
-
-const { JSDOM } = require("jsdom");
-
-const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
-global.document = dom.window.document;
-global.window = dom.window;
+import { describe, it, expect, beforeEach, afterEach } from "bun:test";
+import { GlobalRegistrator } from "@happy-dom/global-registrator";
 
 describe("parse-html-stream", () => {
+  beforeEach(async () => {
+    GlobalRegistrator.register();
+  });
+  afterEach(() => {
+    GlobalRegistrator.unregister();
+  });
+
   it("should handle an empty HTML stream", async () => {
     const stream = new ReadableStream({
       start(controller) {
